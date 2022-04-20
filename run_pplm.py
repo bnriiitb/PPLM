@@ -35,6 +35,7 @@ from tqdm import trange
 from transformers import GPT2Tokenizer
 from transformers.file_utils import cached_path
 from transformers.modeling_gpt2 import GPT2LMHeadModel
+import streamlit as st
 
 from pplm_classification_head import ClassificationHead
 
@@ -657,6 +658,7 @@ def generate_text_pplm(
         )
         if verbosity_level >= REGULAR:
             print(tokenizer.decode(output_so_far.tolist()[0]))
+        st.write(tokenizer.decode(output_so_far.tolist()[0]))
 
     return output_so_far, unpert_discrim_loss, loss_in_time
 
