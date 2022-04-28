@@ -23,6 +23,13 @@ See also our [arXiv paper](https://arxiv.org/abs/1912.02164), [blog post](https:
 pip install -r requirements.txt
 ```
 
+## Run PPLM as a Streamlit App
+---
+```bash
+streamlit run app.py
+```
+
+
 ## Citation
 ```
 @inproceedings{
