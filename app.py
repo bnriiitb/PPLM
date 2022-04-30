@@ -11,18 +11,7 @@ if __name__ == "__main__":
             }}
         </style>""",
                 unsafe_allow_html=True)
-    # def _max_width_(prcnt_width: int = 50):
-    #     max_width_str = f"max-width: {prcnt_width}%;"
-    #     st.markdown(f"""
-    #                 <style>
-    #                 .reportview-container .main .block-container{{{max_width_str}}}
-    #                 </style>
-    #                 """,
-    #                 unsafe_allow_html=True,
-    #                 )
-    #
-    #
-    # _max_width_()
+
     with st.sidebar:
         st.markdown("#### PPLM Model & decoder settings")
         bow = st.radio("Bag-of-words", (
@@ -45,8 +34,8 @@ if __name__ == "__main__":
                   'gen_len': gen_len, 'kl_scale': kl_scale, 'gm_scale': gm_scale, 'gamma': gamma,
                   'use_sampling': use_sampling}
 
-    st.write(params)
-    cond_text = st.text_input('Conditional Text')
+    # st.write(params)
+    cond_text = st.text_input('Please enter the conditional text')
     if st.button("Run PPLM: Generate Text"):
         st.write(cond_text)
         run_pplm_example(
