@@ -367,18 +367,17 @@ def get_classifier(
 def get_bag_of_words_indices(bag_of_words_ids_or_paths: List[str], tokenizer) -> \
         List[List[List[int]]]:
     bow_indices = []
+    from pathlib import Path
     for id_or_path in bag_of_words_ids_or_paths:
         if id_or_path in BAG_OF_WORDS_ARCHIVE_MAP:
             filepath = cached_path(BAG_OF_WORDS_ARCHIVE_MAP[id_or_path])
         else:
-            filepath = id_or_path
+            # filepath = id_or_path
+            filepath = Path(f"paper_code/wordlists/{id_or_path}.txt")
         with open(filepath, "r") as f:
             words = f.read().strip().split("\n")
         bow_indices.append(
-            [tokenizer.encode(word.strip(),
-                              add_prefix_space=True,
-                              add_special_tokens=False)
-             for word in words])
+            [tokenizer.encode(word.strip(), add_prefix_space=True, add_special_tokens=False) for word in words])
     return bow_indices
 
 
