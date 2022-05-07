@@ -657,7 +657,7 @@ def generate_text_pplm(
         )
         if verbosity_level >= REGULAR:
             print(tokenizer.decode(output_so_far.tolist()[0]))
-        st.write(tokenizer.decode(output_so_far.tolist()[0]))
+        st.write(tokenizer.decode(output_so_far.tolist()[0]).lstrip("<|endoftext|>"))
 
     return output_so_far, unpert_discrim_loss, loss_in_time
 

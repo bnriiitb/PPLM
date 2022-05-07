@@ -20,32 +20,55 @@ if __name__ == "__main__":
         bow = st.multiselect(
             'Bag-of-words',
             (
-            "🖥️ computers", "🧚 fantasy", "🔪 kitchen", "‍💼 legal", "🎖 military", "🤴 politics", "😊 positive_words",
-            "🕌 religion", "🧪 science",
-            "🚀 space", "🚗 automotive", "🏐 sports", "🍲 food", "🧳 business", "💰 money", "🌨️ winter",
-            "👮 occupation", "🏖️ holidays", "🗳️ elections"))
+                "🖥️ computers", "🧚 fantasy", "🔪 kitchen", "‍💼 legal", "🎖 military", "🤴 politics",
+                "😊 positive_words",
+                "🕌 religion", "🧪 science",
+                "🚀 space", "🚗 automotive", "🏐 sports", "🍲 food", "🧳 business", "💰 money", "🌨️ winter",
+                "👮 occupation", "🏖️ holidays", "🗳️ elections"))
 
-        discriminator = st.radio("Discriminators",
-                                 ("🐭 clickbait", "🙏 non clickbait", "🙂 positive sentiment", "🙁 neg sentiment"))
+        discriminator = st.radio("Discriminators", ("None", "clickbait", "sentiment"))
+        class_label = -1
+
+        if discriminator == 'sentiment':
+            class_label = st.radio("Class Label", ("very_positive", "very_negative"))
+
+        if discriminator == 'None':
+            discriminator = None
+
         step_size = st.slider('Step size', 0.01, 0.1, (0.03))
         num_samples = st.slider('Num Samples', 1, 30, (3))
         window_length = st.slider('Window length', 5, 25, (5))
         num_iterations = st.slider('Num iterations (impacts gen. time)', 1, 30, (3))
-        gen_len = st.slider('Gen. length (impacts gen. time)', 5, 80, (30))
+        gen_len = st.slider('Gen. length (impacts gen. time)', 5, 80, (50))
         kl_scale = st.slider('KL-scale', 0.0, 0.99, (0.01))
         gm_scale = st.slider('GM-scale', 0.0, 0.99, (0.95))
         gamma = st.slider('gamma', 0.0, 10.0, 1.5)
         use_sampling = st.checkbox('Use sampling', value=True)
 
-        params = {'bow': ";".join([word[2:].strip() for word in bow]), 'discriminator': discriminator[2:].strip(), 'step_size': step_size,
+        params = {'bow': ";".join([word[2:].strip() for word in bow]) if bow else None, 'discriminator': discriminator,
+                  'step_size': step_size,
                   'num_samples': num_samples, 'window_length': window_length, 'num_iterations': num_iterations,
                   'gen_len': gen_len, 'kl_scale': kl_scale, 'gm_scale': gm_scale, 'gamma': gamma,
-                  'use_sampling': use_sampling}
+                  'use_sampling': use_sampling, 'class_label': class_label}
 
+    # cond_text = "My dog died",
+    # num_samples = 3,
+    # discrim = 'sentiment',
+    # class_label = 'very_positive',
+    # length = 50,
+    # stepsize = 0.05,
+    # sample = True,
+    # num_iterations = 10,
+    # gamma = 1,
+    # gm_scale = 0.9,
+    # kl_scale = 0.02,
+    # verbosity = 'regular'
     # st.write(params)
     cond_text = st.text_input('Please enter the conditional text')
     if st.button("Run PPLM: Generate Text"):
         st.write(cond_text)
+        # st.write(
+        #     f"ond_text={cond_text},discrim={params['discriminator']},num_samples={params['num_samples']},bag_of_words={params['bow']},length={params['gen_len']},stepsize={params['step_size']},sample={params['use_sampling']},num_iterations={params['num_iterations']},window_length={params['window_length']},gamma={params['gamma']},gm_scale={params['gm_scale']},kl_scale={params['kl_scale']}")
         run_pplm_example(
             cond_text=cond_text,
             discrim=params['discriminator'],
@@ -61,6 +84,7 @@ if __name__ == "__main__":
             kl_scale=params['kl_scale'],
             verbosity='regular'
         )
+
     # run_pplm_example(
     #     cond_text="The moment",
     #     num_samples=3,
